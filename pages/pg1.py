@@ -51,8 +51,8 @@ def load_data():
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-# df = pl.from_pandas(load_data())
-df = pl.from_pandas(read_feather("Data/Tonghop/"))
+df = pl.from_pandas(load_data())
+#df = pl.from_pandas(read_feather("Data/Tonghop/"))
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
 sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
