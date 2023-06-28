@@ -4,7 +4,7 @@ import polars as pl
 import numpy as np
 import plotly.express as px
 import os
-from jupyter_dash import JupyterDash
+#from jupyter_dash import JupyterDash
 from dash import Dash, dcc, html, Input, Output, State
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -27,7 +27,8 @@ def read_feather(source_file):
 
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
 df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
-app = JupyterDash(__name__)
+#app = JupyterDash(__name__)
+app = Dash(__name__)
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
 sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
