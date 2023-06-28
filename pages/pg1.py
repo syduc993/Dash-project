@@ -31,7 +31,7 @@ def read_feather(source_file):
 
 def load_data():
     username = 'syduc993'
-    repository = 'Streanlit-Project'
+    repository = 'Dash-Project'
     folder = 'Data/Tonghop'
 
     url = f'https://api.github.com/repos/{username}/{repository}/contents/{folder}'
