@@ -26,15 +26,21 @@ def read_feather(source_file):
     return df
 
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
-df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
+df = pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather')
 #app = JupyterDash(__name__)
 app = Dash(__name__)
 
-product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
-sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
-store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
-rsm_list = df.select(['RSM']).unique().to_series().to_list()
-am_list = df.select(['AM']).unique().to_series().to_list()
+# product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
+# sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
+# store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
+# rsm_list = df.select(['RSM']).unique().to_series().to_list()
+# am_list = df.select(['AM']).unique().to_series().to_list()
+
+product_list = df['Tên sản phẩm'].unique().tolist()
+sub_group_list = df['Nhóm hàng'].unique().tolist()
+store_list = df['Mã siêu thị'].unique().tolist()
+rsm_list = df['RSM'].unique().tolist()
+am_list = df['AM'].unique().tolist()
 
 app.layout = html.Div([
     html.Div([
@@ -125,17 +131,19 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     if store_state:
         dict_condition['Mã siêu thị'] = store_selected
     for key, values in dict_condition.items():
-        data = data.filter((pl.col(key) == values))
+        #data = data.filter((pl.col(key) == values))
+        data = data[data[key]==values]
     
-    if month_state:
-        start_date = datetime(2023, month_selected, days_selected[0]).date()
-        try:
-            end_date = datetime(2023, month_selected, days_selected[1]).date()
-        except:
-            end_date = first = start_date.replace(day=1) + relativedelta(months=1, days=-1)
-        data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
+    # if month_state:
+    #     start_date = datetime(2023, month_selected, days_selected[0]).date()
+    #     try:
+    #         end_date = datetime(2023, month_selected, days_selected[1]).date()
+    #     except:
+    #         end_date = first = start_date.replace(day=1) + relativedelta(months=1, days=-1)
+    #     data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
 
-    data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
+    # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
+    data = pd.pivot_table(data,index=['Date'],values=['Số lượng nhập','Số lượng bán','Tồn kho siêu thị','Số lượng thực hủy'],aggfunc=np.sum).reset_index()
 
     fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
     fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
