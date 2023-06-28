@@ -7,7 +7,7 @@ import numpy as np
 import polars as pl
 from dateutil.relativedelta import relativedelta
 import requests
-from jupyter_dash import JupyterDash
+#from jupyter_dash import JupyterDash
 from dash import Dash, dcc, html, Input, Output, State, callback
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
