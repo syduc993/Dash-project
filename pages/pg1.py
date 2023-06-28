@@ -160,12 +160,12 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     #         end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
     #     data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
 
-    # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
+    data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
 
-    # fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
-    # fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
-    # fig.add_trace(go.Scatter(x = data["Date"], y = data["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
-    # fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
 
     # fig.update_layout(title=rsm_selected)
     # fig.update_layout(width=1550, height=800)
