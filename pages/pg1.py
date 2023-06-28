@@ -170,10 +170,10 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     fig.update_layout(title='Biểu đồ số lượng nhập bán hủy & tồn sản phẩm')
     fig.update_layout(width=1550, height=800)
 
-    fig.update_layout(
-        xaxis=dict(
-            tickformat='%d-%b', # Định dạng lại trục x-axis chỉ hiển thị ngày tháng
-        )
-    )
+    # fig.update_layout(
+    #     xaxis=dict(
+    #         tickformat='%d-%b', # Định dạng lại trục x-axis chỉ hiển thị ngày tháng
+    #     )
+    # )
  
     return fig
