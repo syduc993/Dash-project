@@ -25,7 +25,7 @@ def read_feather(source_file):
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-df = pl.from_pandas(read_feather("Data/Tonghop/"))
+#df = pl.from_pandas(read_feather("Data/Tonghop/"))
 df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
 app = JupyterDash(__name__)
 
