@@ -53,8 +53,8 @@ def load_data():
 
 #df = pl.from_pandas(load_data())
 #df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
-#df = pl.from_pandas(read_feather("Data/Tonghop/")).head(1000)
-df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
+df = pl.from_pandas(read_feather("Data/Tonghop/")).head(1000)
+#df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
 sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
 store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
