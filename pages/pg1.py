@@ -52,7 +52,7 @@ def load_data():
     return df
 
 df = pl.from_pandas(load_data())
-df = pl.from_pandas(pd.read_feather("https://github.com/syduc993/Dash-project/blob/main/Data/Tonghop/Data_0.feather"))
+#df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()

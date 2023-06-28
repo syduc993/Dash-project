@@ -26,6 +26,7 @@ def read_feather(source_file):
     return df
 
 df = pl.from_pandas(read_feather("Data/Tonghop/"))
+df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
 app = JupyterDash(__name__)
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
