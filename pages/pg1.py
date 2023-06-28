@@ -51,11 +51,10 @@ def load_data():
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-df = pl.from_pandas(load_data())
+#df = pl.from_pandas(load_data())
 #df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
-#df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
-
+df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/"))
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
 sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
 store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
@@ -158,7 +157,7 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
         try:
             end_date = datetime(2023, month_selected, days_selected[1]).date()
         except:
-            end_date = first = start_date.replace(day=1) + relativedelta(months=1, days=-1)
+            end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
         data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
 
     data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
