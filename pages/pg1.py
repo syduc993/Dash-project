@@ -17,8 +17,8 @@ import os
 import plotly.io as pio
 pio.templates.default = "seaborn"
 
-dash.register_page(__name__, path='/', name='Home')
-
+#dash.register_page(__name__, path='/', name='Home')
+dash.register_page(__name__, name='Home')
 def read_feather(source_file):
     feather_file_list = os.listdir(source_file)
     df = pd.DataFrame()
@@ -167,7 +167,7 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     # fig.add_trace(go.Scatter(x = data["Date"], y = data["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
     # fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
 
-    fig.update_layout(title=rsm_selected)
-    fig.update_layout(width=1550, height=800)
+    # fig.update_layout(title=rsm_selected)
+    # fig.update_layout(width=1550, height=800)
  
     return fig
