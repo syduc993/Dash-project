@@ -51,15 +51,20 @@ def load_data():
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-#df = pl.from_pandas(load_data())
-#df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
-df = pl.from_pandas(read_feather("Data/Tonghop/")).head(1000)
+df = df = pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather')
 #df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
-product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
-sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
-store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
-rsm_list = df.select(['RSM']).unique().to_series().to_list()
-am_list = df.select(['AM']).unique().to_series().to_list()
+
+product_list = df['Tên sản phẩm'].unique().tolist()
+sub_group_list = df['Nhóm hàng'].unique().tolist()
+store_list = df['Mã siêu thị'].unique().tolist()
+rsm_list = df['RSM'].unique().tolist()
+am_list = df['AM'].unique().tolist()
+
+# product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
+# sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
+# store_list = df.select(['Mã siêu thị']).unique().to_series().to_list()
+# rsm_list = df.select(['RSM']).unique().to_series().to_list()
+# am_list = df.select(['AM']).unique().to_series().to_list()
 
 layout = html.Div([
     html.Div([
@@ -137,7 +142,7 @@ layout = html.Div([
 def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,store_selected,month_selected,days_selected,sub_group_state,product_state,rsm_state,am_state,store_state,month_state,day_state):
 
     data = df
-    #fig = make_subplots(rows=2, cols=2, subplot_titles=("Số lượng nhập sản phẩm", "Số lượng bán sản phẩm","Số lượng tồn sản phẩm","Số lượng hủy sản phẩm"), horizontal_spacing=0.05)
+    fig = make_subplots(rows=2, cols=2, subplot_titles=("Số lượng nhập sản phẩm", "Số lượng bán sản phẩm","Số lượng tồn sản phẩm","Số lượng hủy sản phẩm"), horizontal_spacing=0.05)
     dict_condition = {}
     if sub_group_state:
         dict_condition['Nhóm hàng'] = sub_group_selected
@@ -150,7 +155,8 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     if store_state:
         dict_condition['Mã siêu thị'] = store_selected
     for key, values in dict_condition.items():
-        data = data.filter((pl.col(key) == values))
+        #data = data.filter((pl.col(key) == values))
+        data = data[data[key]==values]
     
     if month_state:
         start_date = datetime(2023, month_selected, days_selected[0]).date()
@@ -158,15 +164,14 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
             end_date = datetime(2023, month_selected, days_selected[1]).date()
         except:
             end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
-        data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
+        data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
 
     # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
-
-    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
-    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
-    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
-    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
-    fig = make_subplots(rows=1, cols=1)
+    data = pd.pivot_table(data,index=['Date'],values=['Số lượng nhập','Số lượng bán','Tồn kho siêu thị','Số lượng thực hủy'],aggfunc=np.sum).reset_index()
+    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
+    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
+    fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
+    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
 
     fig.update_layout(title=rsm_selected)
     fig.update_layout(width=1550, height=800)
