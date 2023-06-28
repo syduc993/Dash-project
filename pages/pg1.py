@@ -51,10 +51,10 @@ def load_data():
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-#df = pl.from_pandas(load_data())
+df = pl.from_pandas(load_data())
 #df = pl.from_pandas(pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather'))
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
-df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
+#df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
 sub_group_list = df.select(['Nhóm hàng']).unique().to_series().to_list()
@@ -163,10 +163,10 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
 
     data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
 
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
+    fig.add_trace(go.Scatter(x = data["Date"], y = data["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
 
     fig.update_layout(title='Biểu đồ số lượng nhập bán hủy & tồn sản phẩm')
     fig.update_layout(width=1550, height=800)
