@@ -137,35 +137,42 @@ layout = html.Div([
 def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,store_selected,month_selected,days_selected,sub_group_state,product_state,rsm_state,am_state,store_state,month_state,day_state):
 
     data = df
-    fig = make_subplots(rows=2, cols=2, subplot_titles=("Số lượng nhập sản phẩm", "Số lượng bán sản phẩm","Số lượng tồn sản phẩm","Số lượng hủy sản phẩm"), horizontal_spacing=0.05)
-    # dict_condition = {}
-    # if sub_group_state:
-    #     dict_condition['Nhóm hàng'] = sub_group_selected
-    # if product_state:
-    #     dict_condition['Tên sản phẩm'] = product_selected
-    # if rsm_state:
-    #     dict_condition['RSM'] = rsm_selected
-    # if am_state:
-    #     dict_condition['AM'] = am_selected
-    # if store_state:
-    #     dict_condition['Mã siêu thị'] = store_selected
-    # for key, values in dict_condition.items():
-    #     data = data.filter((pl.col(key) == values))
+    #fig = make_subplots(rows=2, cols=2, subplot_titles=("Số lượng nhập sản phẩm", "Số lượng bán sản phẩm","Số lượng tồn sản phẩm","Số lượng hủy sản phẩm"), horizontal_spacing=0.05)
+    dict_condition = {}
+    if sub_group_state:
+        dict_condition['Nhóm hàng'] = sub_group_selected
+    if product_state:
+        dict_condition['Tên sản phẩm'] = product_selected
+    if rsm_state:
+        dict_condition['RSM'] = rsm_selected
+    if am_state:
+        dict_condition['AM'] = am_selected
+    if store_state:
+        dict_condition['Mã siêu thị'] = store_selected
+    for key, values in dict_condition.items():
+        data = data.filter((pl.col(key) == values))
     
-    # if month_state:
-    #     start_date = datetime(2023, month_selected, days_selected[0]).date()
-    #     try:
-    #         end_date = datetime(2023, month_selected, days_selected[1]).date()
-    #     except:
-    #         end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
-    #     data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
+    if month_state:
+        start_date = datetime(2023, month_selected, days_selected[0]).date()
+        try:
+            end_date = datetime(2023, month_selected, days_selected[1]).date()
+        except:
+            end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
+        data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
 
-    data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
+    # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
 
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
-    fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
+    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
+    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
+    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
+    # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
+    fig = go.Figure(
+    data=[go.Bar(x=[1, 2, 3], y=[1, 3, 2])],
+    layout=go.Layout(
+        title=go.layout.Title(text="A Figure Specified By A Graph Object")
+    )
+    )
+
 
     fig.update_layout(title=rsm_selected)
     fig.update_layout(width=1550, height=800)
