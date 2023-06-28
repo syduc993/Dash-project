@@ -1,8 +1,8 @@
 import dash
 from dash import dcc, html
 
-#dash.register_page(__name__, name='Comeming soon')
-dash.register_page(__name__, path='/', name='Homememe')
+dash.register_page(__name__, name='Comeming soon')
+#dash.register_page(__name__, path='/', name='Homememe')
 
 layout = html.Div(
     [

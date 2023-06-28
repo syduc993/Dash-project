@@ -134,13 +134,14 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
         #data = data.filter((pl.col(key) == values))
         data = data[data[key]==values]
     
-    # if month_state:
-    #     start_date = datetime(2023, month_selected, days_selected[0]).date()
-    #     try:
-    #         end_date = datetime(2023, month_selected, days_selected[1]).date()
-    #     except:
-    #         end_date = first = start_date.replace(day=1) + relativedelta(months=1, days=-1)
-    #     data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
+    if month_state:
+        start_date = datetime(2023, month_selected, days_selected[0]).date()
+        try:
+            end_date = datetime(2023, month_selected, days_selected[1]).date()
+        except:
+            end_date = first = start_date.replace(day=1) + relativedelta(months=1, days=-1)
+        # data = data.filter((pl.col('Date') >= start_date) & (pl.col('Date') <= end_date))
+        data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
 
     # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
     data = pd.pivot_table(data,index=['Date'],values=['Số lượng nhập','Số lượng bán','Tồn kho siêu thị','Số lượng thực hủy'],aggfunc=np.sum).reset_index()

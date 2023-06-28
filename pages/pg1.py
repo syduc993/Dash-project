@@ -17,8 +17,8 @@ import os
 import plotly.io as pio
 pio.templates.default = "seaborn"
 
-#dash.register_page(__name__, path='/', name='Home')
-dash.register_page(__name__, name='Home')
+dash.register_page(__name__, path='/', name='Home')
+#dash.register_page(__name__, name='Home')
 def read_feather(source_file):
     feather_file_list = os.listdir(source_file)
     df = pd.DataFrame()
@@ -51,7 +51,7 @@ def load_data():
             df = pd.concat([df, df1], ignore_index=True, sort=False)
     return df
 
-df = df = pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather')
+df = pd.read_feather('https://raw.githubusercontent.com/syduc993/Streanlit-Project/main/Data/Tonghop/Data_0.feather')
 #df = pl.from_pandas(read_feather("Dash-project/Data/Tonghop/")).head(100)
 
 product_list = df['Tên sản phẩm'].unique().tolist()
@@ -158,16 +158,17 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
         #data = data.filter((pl.col(key) == values))
         data = data[data[key]==values]
     
-    if month_state:
-        start_date = datetime(2023, month_selected, days_selected[0]).date()
-        try:
-            end_date = datetime(2023, month_selected, days_selected[1]).date()
-        except:
-            end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
-        data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
+    # if month_state:
+    #     start_date = datetime(2023, month_selected, days_selected[0]).date()
+    #     try:
+    #         end_date = datetime(2023, month_selected, days_selected[1]).date()
+    #     except:
+    #         end_date = start_date.replace(day=1) + relativedelta(months=1, days=-1)
+    #     data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
 
     # data = data.groupby('Date').agg(pl.col("Số lượng bán","Số lượng nhập","Số lượng thực hủy","Tồn kho siêu thị").sum()).to_pandas().sort_values(by="Date",ascending=True).reset_index().drop(columns=['index'])
-    data = pd.pivot_table(data,index=['Date'],values=['Số lượng nhập','Số lượng bán','Tồn kho siêu thị','Số lượng thực hủy'],aggfunc=np.sum).reset_index()
+    data =  pd.pivot_table(data,index=['Date'],values=['Số lượng nhập','Số lượng bán','Tồn kho siêu thị','Số lượng thực hủy'],aggfunc=np.sum).reset_index()
+    
     fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng nhập"], fill='tozeroy',showlegend=False),row=1, col=1)
     fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
     fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
