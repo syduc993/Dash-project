@@ -166,13 +166,7 @@ def update_figure(sub_group_selected,product_selected,rsm_selected,am_selected,s
     # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng bán"], fill='tozeroy' ,showlegend=False),row=1, col=2)
     # fig.add_trace(go.Scatter(x = df["Date"], y = df["Tồn kho siêu thị"], fill='tozeroy',showlegend=False),row=2, col=1)
     # fig.add_trace(go.Scatter(x = df["Date"], y = df["Số lượng thực hủy"], fill='tozeroy' ,showlegend=False),row=2, col=2)
-    fig = go.Figure(
-    data=[go.Bar(x=[1, 2, 3], y=[1, 3, 2])],
-    layout=go.Layout(
-        title=go.layout.Title(text="A Figure Specified By A Graph Object")
-    )
-    )
-
+    fig = make_subplots(rows=1, cols=1)
 
     fig.update_layout(title=rsm_selected)
     fig.update_layout(width=1550, height=800)
