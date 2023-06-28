@@ -17,7 +17,7 @@ import os
 import plotly.io as pio
 pio.templates.default = "seaborn"
 
-dash.register_page(__name__, path='/', name='Home') # '/' is home page
+dash.register_page(__name__, path='/', name='Home')
 
 def read_feather(source_file):
     feather_file_list = os.listdir(source_file)
@@ -52,6 +52,7 @@ def load_data():
     return df
 
 df = pl.from_pandas(load_data())
+df = pl.from_pandas(pd.read_feather("https://github.com/syduc993/Dash-project/blob/main/Data/Tonghop/Data_0.feather"))
 #df = pl.from_pandas(read_feather("Data/Tonghop/"))
 
 product_list = df.select(['Tên sản phẩm']).unique().to_series().to_list()
